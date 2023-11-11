@@ -32,7 +32,7 @@ class ForecastCard extends StatelessWidget {
         children: [
           Text(time, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
           const Icon(Icons.cloud, color: Colors.white,),
-          Text('$temperatureº', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)
+          Text('$temperatureº', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),)
         ],
       ),
     );

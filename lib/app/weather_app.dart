@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/pages/home/home_page.dart';
 import 'package:weather_app/pages/location/location_page.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -7,7 +6,7 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Weather App',
       home: LocationPage(),
     );

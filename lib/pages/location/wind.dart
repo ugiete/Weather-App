@@ -164,7 +164,7 @@ class WindPanel extends StatelessWidget {
                           )
                         )
                       ),
-                      GaugeAnnotation(
+                      const GaugeAnnotation(
                         angle: 90,
                         positionFactor: 0.3,
                         widget: Text(
