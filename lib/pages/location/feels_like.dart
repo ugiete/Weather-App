@@ -13,7 +13,7 @@ class FeelsLikePanel extends StatelessWidget {
     } else if (feelsLike > temperature) {
       return 'Feeling warmer than real temperature';
     } else {
-      return 'Felling similar to real temperature';
+      return 'Feeling similar to real temperature';
     }
   }
 

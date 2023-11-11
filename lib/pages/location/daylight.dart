@@ -50,7 +50,7 @@ class DaylightPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              formatter.format(isDay ? sunset : sunrise),
+              formatter.format(isDay ? sunset.toLocal() : sunrise.toLocal()),
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -73,8 +73,8 @@ class DaylightPanel extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 isDay
-                  ? 'Sunrise: ${formatter.format(sunrise)}'
-                  : 'Sunset: ${formatter.format(sunset)}',
+                  ? 'Sunrise: ${formatter.format(sunrise.toLocal())}'
+                  : 'Sunset: ${formatter.format(sunset.toLocal())}',
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontWeight: FontWeight.w400,
@@ -126,7 +126,7 @@ class DaylightWave extends CustomPainter {
     canvas.drawPath(path, paint);
 
     paint = Paint()
-      ..color = Colors.grey.shade300
+      ..color = Colors.indigo.shade300
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 

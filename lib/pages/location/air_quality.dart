@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AirQualityPanel extends StatelessWidget {
-  final int index;
+  final int? index;
 
   const AirQualityPanel({super.key, required this.index});
 
   String _category() {
-    if (index <= 3) {
+    if (index! <= 3) {
       return 'Low';
-    } else if (index <= 6) {
+    } else if (index! <= 6) {
       return 'Moderate';
-    } else if (index < 10) {
+    } else if (index! < 10) {
       return 'High';
     } else {
       return 'Extreme';
@@ -52,7 +52,9 @@ class AirQualityPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Text(
-              '$index-${_category()} Health Risk',
+              index == null
+                ? 'N/A'
+                : '$index-${_category()} Health Risk',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -66,7 +68,7 @@ class AirQualityPanel extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               color: Colors.purpleAccent,
               backgroundColor: Colors.indigo.shade300,
-              value: index/10,
+              value: (index ?? 1)/10,
             ),
           )
         ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class HumidyPanel extends StatelessWidget {
   final int humidity;
-  final int dewPoint;
+  final int? dewPoint;
 
   const HumidyPanel({super.key, required this.humidity, required this.dewPoint});
 
@@ -52,7 +52,7 @@ class HumidyPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Text(
-              'The dew point right now is $dewPointº',
+              'The dew point right now is ${dewPoint == null ? "N/A" : "$dewPointº"}',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12

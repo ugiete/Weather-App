@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/model/city.dart';
+import 'package:weather_app/model/forecast.dart';
 import 'package:weather_app/pages/location/air_quality.dart';
 import 'package:weather_app/pages/location/daylight.dart';
 import 'package:weather_app/pages/location/feels_like.dart';
@@ -8,9 +10,43 @@ import 'package:weather_app/pages/location/pressure.dart';
 import 'package:weather_app/pages/location/uv_index.dart';
 import 'package:weather_app/pages/location/visibility.dart';
 import 'package:weather_app/pages/location/wind.dart';
+import 'package:weather_app/services/weather_api.dart';
 
-class LocationPage extends StatelessWidget {
-  const LocationPage({super.key});
+class LocationPage extends StatefulWidget {
+  final CityModel location;
+  final ForecastModel? initialForecast;
+
+  const LocationPage({super.key, required this.location, this.initialForecast});
+
+  @override
+  State<LocationPage> createState() => _LocationPageState();
+}
+
+class _LocationPageState extends State<LocationPage> {
+  late ForecastModel forecast;
+  late bool loading;
+
+  Future<void> loadForecast() async {
+    forecast = await getForecast(widget.location);
+
+    setState(() {
+      loading = false;  
+    });
+  }
+
+  @override
+  void initState() {
+    if (widget.initialForecast != null) {
+      forecast = widget.initialForecast!;
+      loading = false;
+    } else {
+      loading = true;
+    }
+
+    super.initState();
+
+    loadForecast();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +58,21 @@ class LocationPage extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.only(bottom: 10.0),
           color: const Color(0xFF2F2F55).withAlpha(200),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Edmonton',
-                style: TextStyle(
+                widget.location.city,
+                style: const TextStyle(
                   fontSize: 32,
                   color: Colors.white
                 ),
               ),
               Text(
-                '19º | Mostly Clear',
-                style: TextStyle(
+                loading
+                  ? '-'
+                  : '${forecast.temperature}º | ${forecast.main}',
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.grey
                 ),
@@ -43,89 +81,95 @@ class LocationPage extends StatelessWidget {
           ),
         )
       ),
-      body: ListView(
+      body: loading
+      ? const Center(
+        child: CircularProgressIndicator(
+          color: Colors.purpleAccent,
+        ),
+      )
+      : ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 40.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 80.0),
         children: [
-          const AirQualityPanel(
-            index: 3,
+          AirQualityPanel(
+            index: forecast.airQuality,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: IntrinsicHeight(
               child: Row(
                 children: [
-                  const Flexible(
+                  Flexible(
                     child: UVIndexPanel(
-                      index: 2,
+                      index: forecast.uvi,
                     )
                   ),
                   const SizedBox(width: 10),
                   Flexible(
                     child: DaylightPanel(
-                      sunrise: DateTime(2023, 11, 11, 4, 43),
-                      sunset: DateTime(2023, 11, 11, 19, 54),
+                      sunrise: forecast.sunrise,
+                      sunset: forecast.sunset,
                     )
                   )
                 ],
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
             child: IntrinsicHeight(
               child: Row(
                 children: [
                   Flexible(
                     child: FeelsLikePanel(
-                      feelsLike: 2,
-                      temperature: 2,
+                      feelsLike: forecast.feelsLike,
+                      temperature: forecast.temperature,
                     )
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                     child: HumidyPanel(
-                      humidity: 55,
-                      dewPoint: -3
+                      humidity: forecast.humidity,
+                      dewPoint: forecast.dewPoint
                     )
                   )
                 ],
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
             child: IntrinsicHeight(
               child: Row(
                 children: [
                   Flexible(
-                    child: VisibilityPanel(visibility: 100)
+                    child: VisibilityPanel(visibility: forecast.visibility)
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                     child: PrecipitationPanel(
-                      rain: 0,
-                      snow: 10,
+                      rain: forecast.rain,
+                      snow: forecast.snow,
                     )
                   )
                 ],
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
             child: IntrinsicHeight(
               child: Row(
                 children: [
                   Flexible(
                     child: WindPanel(
-                      speed: 3,
-                      angle: 218
+                      speed: forecast.windSpeed,
+                      angle: forecast.windAngle
                     )
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
-                    child: PressurePanel(pressure: 1014)
+                    child: PressurePanel(pressure: forecast.pressure)
                   )
                 ],
               ),
@@ -133,6 +177,21 @@ class LocationPage extends StatelessWidget {
           )
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFF2F2F55),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, color: Colors.white),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list, color: Colors.white),
+            label: 'List',
+          )
+        ]
+      )
     );
   }
 }

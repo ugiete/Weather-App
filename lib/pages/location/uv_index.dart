@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class UVIndexPanel extends StatelessWidget {
-  final int index;
+  final int? index;
 
   const UVIndexPanel({super.key, required this.index});
 
   String _category() {
-    if (index <= 2) {
+    if (index! <= 2) {
       return 'Low';
-    } else if (index <= 5) {
+    } else if (index! <= 5) {
       return 'Moderate';
-    } else if (index <= 7) {
+    } else if (index! <= 7) {
       return 'High';
-    } else if (index <= 10) {
+    } else if (index! <= 10) {
       return 'Very High';
     } else {
       return 'Extreme';
@@ -54,7 +54,9 @@ class UVIndexPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Text(
-              index.toString(),
+              index == null
+                ? 'N/A'
+                : index.toString(),
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -63,7 +65,9 @@ class UVIndexPanel extends StatelessWidget {
             ),
           ),
           Text(
-            _category(),
+            index == null
+              ? ''
+              : _category(),
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -76,7 +80,7 @@ class UVIndexPanel extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               color: Colors.purpleAccent,
               backgroundColor: Colors.indigo.shade300,
-              value: index/11,
+              value: (index ?? 1)/11,
             ),
           )
         ],

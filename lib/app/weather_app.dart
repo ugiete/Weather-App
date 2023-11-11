@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/model/city.dart';
 import 'package:weather_app/pages/location/location_page.dart';
 
 class WeatherApp extends StatelessWidget {
@@ -8,7 +9,9 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Weather App',
-      home: LocationPage(),
+      home: LocationPage(
+        location: CityModel('Edmonton', 'AB', 'CA'),
+      ),
     );
   }
 }
