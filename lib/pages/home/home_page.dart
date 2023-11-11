@@ -42,15 +42,6 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Positioned(
-                bottom: 200,
-                child: SizedBox(
-                  height: 300,
-                  child: Image.asset(
-                    'assets/images/House.png',
-                  ),
-                ),
-              ),
               const Positioned(
                 top: 100,
                 child: Column(
