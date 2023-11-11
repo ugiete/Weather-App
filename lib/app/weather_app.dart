@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/pages/home/home_page.dart';
 
 class WeatherApp extends StatelessWidget {
   const WeatherApp({super.key});
@@ -7,7 +8,7 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weather App',
-      home: Placeholder(),
+      home: HomePage(),
     );
   }
 }
