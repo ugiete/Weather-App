@@ -27,15 +27,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF2F2F55),
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/night.png'),
-            fit: BoxFit.cover
-          )
-        ),
+        decoration: const BoxDecoration(),
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height,
           width: MediaQuery.sizeOf(context).width,
@@ -124,10 +118,7 @@ class _HomePageState extends State<HomePage> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 20.0,
-                                  bottom: 100.0
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 40.0),
                                 child: ListView.builder(
                                   controller: hourlyController,
                                   shrinkWrap: true,
@@ -152,10 +143,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 20.0,
-                                  bottom: 100.0
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 40.0),
                                 child: ListView(
                                   controller: weeklyController,
                                   shrinkWrap: true,
