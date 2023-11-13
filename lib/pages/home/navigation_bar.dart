@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/model/location.dart';
+import 'package:weather_app/pages/locations/locations_page.dart';
+import 'package:weather_app/services/database.dart';
 import 'package:weather_app/services/geolocation.dart';
 
 class ControllerBottomBar extends StatelessWidget {
   const ControllerBottomBar({super.key});
 
   Future<void> getPosition() async {
-    getCurrentPosition()
-      .then((Position position) {
-        debugPrint(position.latitude.toString());
-        debugPrint(position.longitude.toString());
-      })
-      .onError((error, stackTrace) {
-        debugPrint(error.toString());
-      });
+    Position? position = await getCurrentPosition();
+
+    LocationModel location = LocationModel(null, 'Victoria', 'British Columbia', 'Canada', position?.latitude, position?.longitude);
+
+    await DatabaseManager().addLocation(location, null);
   }
 
-  void listLocations(BuildContext context) {
-    //
+  Future<void> listLocations(BuildContext context) async {
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const LocationsPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const ThreePointCubic curve = Curves.fastEaseInToSlowEaseOut;
+          CurvedAnimation curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+          return ScaleTransition(scale: curvedAnimation, child: child);
+        }
+      )
+    );
   }
 
   @override

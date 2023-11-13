@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:weather_app/model/city.dart';
+import 'package:weather_app/model/location.dart';
 import 'package:weather_app/model/forecast.dart';
 
-Future<ForecastModel> getForecast(CityModel location) async {
+Future<ForecastModel> getForecast(LocationModel location) async {
   http.Response response = await http.post(
     Uri.https(
       'api.openweathermap.org',

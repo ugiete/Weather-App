@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/model/city.dart';
+import 'package:weather_app/model/location.dart';
 import 'package:weather_app/model/forecast.dart';
 import 'package:weather_app/pages/location/air_quality.dart';
 import 'package:weather_app/pages/location/daylight.dart';
@@ -13,7 +13,7 @@ import 'package:weather_app/pages/location/wind.dart';
 import 'package:weather_app/services/weather_api.dart';
 
 class LocationPage extends StatefulWidget {
-  final CityModel location;
+  final LocationModel location;
   final ForecastModel? initialForecast;
 
   const LocationPage({super.key, required this.location, this.initialForecast});

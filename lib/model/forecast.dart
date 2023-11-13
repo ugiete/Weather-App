@@ -1,4 +1,6 @@
 class ForecastModel {
+  int? id;
+  int? locationId;
   final String main;
   final String description;
   final DateTime sunrise;
@@ -18,9 +20,11 @@ class ForecastModel {
   final int rain;
   final int snow;
 
-  const ForecastModel(this.main, this.description, this.sunrise, this.sunset, this.temperature, this.temperatureMin, this.temperatureMax, this.feelsLike, this.pressure, this.humidity, this.airQuality, this.dewPoint, this.uvi, this.visibility, this.windSpeed, this.windAngle, this.rain, this.snow);
+  ForecastModel(this.id, this.locationId, this.main, this.description, this.sunrise, this.sunset, this.temperature, this.temperatureMin, this.temperatureMax, this.feelsLike, this.pressure, this.humidity, this.airQuality, this.dewPoint, this.uvi, this.visibility, this.windSpeed, this.windAngle, this.rain, this.snow);
 
   factory ForecastModel.fromJSON(Map<String, dynamic> json) {
+    int? id = json['id'];
+    int? locationId = json['locationId'];
     String main = json['weather'][0]['main'];
     String description = json['weather'][0]['description'];
     DateTime sunrise = DateTime.fromMillisecondsSinceEpoch(json['sys']['sunrise'] * 1000, isUtc: true);
@@ -40,6 +44,30 @@ class ForecastModel {
     int rain = json['rain']?.toInt() ?? 0;
     int snow = json['snow']?.toInt() ?? 0;
 
-    return ForecastModel(main, description, sunrise, sunset, temperature, temperatureMin, temperatureMax, feelsLike, pressure, humidity, airQuality, dewPoint, uvi, visibility, windSpeed, windAngle, rain, snow);
+    return ForecastModel(id, locationId, main, description, sunrise, sunset, temperature, temperatureMin, temperatureMax, feelsLike, pressure, humidity, airQuality, dewPoint, uvi, visibility, windSpeed, windAngle, rain, snow);
+  }
+
+  Map<String, dynamic> get toMap {
+    return {
+      'locationId': locationId,
+      'main': main,
+      'description': description,
+      'sunrise': sunrise,
+      'sunset': sunset,
+      'temperature': temperature,
+      'temperatureMin': temperatureMin,
+      'temperatureMax': temperatureMax,
+      'feelsLike': feelsLike,
+      'pressure': pressure,
+      'humidity': humidity,
+      'airQuality': airQuality,
+      'dewPoint': dewPoint,
+      'uvi': uvi,
+      'visibility': visibility,
+      'windSpeed': windSpeed,
+      'windAngle': windAngle,
+      'rain': rain,
+      'snow': snow
+    };
   }
 }
