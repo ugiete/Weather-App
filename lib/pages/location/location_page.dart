@@ -4,6 +4,7 @@ import 'package:weather_app/model/forecast.dart';
 import 'package:weather_app/pages/location/air_quality.dart';
 import 'package:weather_app/pages/location/daylight.dart';
 import 'package:weather_app/pages/location/feels_like.dart';
+import 'package:weather_app/pages/location/forecast.dart';
 import 'package:weather_app/pages/location/humidity.dart';
 import 'package:weather_app/pages/location/precipitation.dart';
 import 'package:weather_app/pages/location/pressure.dart';
@@ -91,8 +92,12 @@ class _LocationPageState extends State<LocationPage> {
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 80.0),
         children: [
-          AirQualityPanel(
-            index: forecast.airQuality,
+          const ForecastPanel(),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: AirQualityPanel(
+              index: forecast.airQuality ?? 5,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
@@ -101,7 +106,7 @@ class _LocationPageState extends State<LocationPage> {
                 children: [
                   Flexible(
                     child: UVIndexPanel(
-                      index: forecast.uvi,
+                      index: forecast.uvi ?? 3,
                     )
                   ),
                   const SizedBox(width: 10),

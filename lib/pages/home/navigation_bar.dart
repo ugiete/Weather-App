@@ -11,7 +11,7 @@ class ControllerBottomBar extends StatelessWidget {
   Future<void> getPosition() async {
     Position? position = await getCurrentPosition();
 
-    LocationModel location = LocationModel(null, 'Victoria', 'British Columbia', 'Canada', position?.latitude, position?.longitude);
+    LocationModel location = LocationModel(null, 'Calgary', 'Alberta', 'Canada', position?.latitude, position?.longitude);
 
     await DatabaseManager().addLocation(location, null);
   }

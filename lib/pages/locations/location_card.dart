@@ -1,24 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:weather_app/model/location.dart';
+import 'package:weather_app/pages/location/location_page.dart';
+import 'package:weather_app/services/storage.dart';
 
 class LocationCard extends StatelessWidget {
   final void Function() onDelete;
   final LocationModel location;
+  final bool isDefault;
   
-  const LocationCard({super.key, required this.location, required this.onDelete});
+  const LocationCard({super.key, required this.location, required this.onDelete, required this.isDefault});
+
+  void saveDefaultLocation(BuildContext context) {
+    StorageManager().updateDefaultLocation(location);
+  }
 
   void openLocation(BuildContext context) {
-    debugPrint(location.id.toString());
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => LocationPage(location: location),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const ThreePointCubic curve = Curves.fastEaseInToSlowEaseOut;
+          CurvedAnimation curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+          return ScaleTransition(scale: curvedAnimation, child: child);
+        }
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
       endActionPane: ActionPane(
-        extentRatio: 0.3,
         motion: const BehindMotion(),
         children: [
+          if (!isDefault)
+            SlidableAction(
+              onPressed: saveDefaultLocation,
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              icon: Icons.star
+            ),
           SlidableAction(
             onPressed: (BuildContext context) => onDelete(),
             backgroundColor: const Color(0xFFFE4A49),

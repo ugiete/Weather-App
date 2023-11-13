@@ -42,6 +42,16 @@ class DatabaseManager {
     });
   }
 
+  Future<LocationModel?> getLocation(int id) async {
+    List<Map<String, dynamic>> raw = await _db?.rawQuery("SELECT * FROM locations WHERE id = '$id'") ?? [];
+    
+    if (raw.isNotEmpty) {
+      return LocationModel.fromJSON(raw.first);
+    }
+
+    return null;
+  }
+
   Future<List<LocationModel>> listLocations() async {
     List<LocationModel> locations = [];
     List<Map<String, dynamic>> raw = await _db?.rawQuery('SELECT * FROM locations') ?? [];

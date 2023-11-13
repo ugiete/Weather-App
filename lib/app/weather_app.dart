@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/model/location.dart';
 import 'package:weather_app/pages/home/home_page.dart';
+import 'package:weather_app/pages/locations/locations_page.dart';
 
 class WeatherApp extends StatelessWidget {
-  const WeatherApp({super.key});
+  final LocationModel? defaultLocation;
+
+  const WeatherApp({super.key, required this.defaultLocation});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Weather App',
-      home: HomePage()
+      home: defaultLocation == null
+        ? const LocationsPage()
+        : HomePage(
+          location: defaultLocation!
+        )
     );
   }
 }

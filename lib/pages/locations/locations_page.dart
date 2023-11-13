@@ -12,7 +12,7 @@ class LocationsPage extends StatefulWidget {
 
 class _LocationsPageState extends State<LocationsPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
@@ -32,6 +32,9 @@ class _LocationsPageState extends State<LocationsPage> {
                 return options.map((Map<String, dynamic> option) {
                   return PopupMenuItem(
                     child: ListTile(
+                      onTap: () {
+
+                      },
                       contentPadding: EdgeInsets.zero,
                       horizontalTitleGap: 2,
                       leading: SizedBox(
@@ -119,6 +122,7 @@ class _LocationsPageState extends State<LocationsPage> {
                       return Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: LocationCard(
+                          isDefault: false,
                           location: snapshot.data![index],
                           onDelete: () {
                             DatabaseManager().deleteLocation(snapshot.data![index]).whenComplete(() {

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/model/location.dart';
 import 'package:weather_app/pages/home/forecast_card.dart';
 import 'package:weather_app/pages/home/navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final LocationModel location;
+
+  const HomePage({super.key, required this.location});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,19 +39,19 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              const Positioned(
+              Positioned(
                 top: 100,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Edmonton',
-                      style: TextStyle(
+                      widget.location.city,
+                      style: const TextStyle(
                         fontSize: 32,
                         color: Colors.white
                       ),
                     ),
-                    Text(
+                    const Text(
                       '19º',
                       style: TextStyle(
                         fontSize: 80,
@@ -56,14 +59,14 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w200
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Mostly Clear',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey
                       ),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(top: 4.0),
                       child: Text(
                         'H:24º L:18º',
