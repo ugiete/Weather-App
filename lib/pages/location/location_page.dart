@@ -11,6 +11,8 @@ import 'package:weather_app/pages/location/pressure.dart';
 import 'package:weather_app/pages/location/uv_index.dart';
 import 'package:weather_app/pages/location/visibility.dart';
 import 'package:weather_app/pages/location/wind.dart';
+import 'package:weather_app/pages/locations/locations_page.dart';
+import 'package:weather_app/pages/map/map_page.dart';
 import 'package:weather_app/services/weather_api.dart';
 
 class LocationPage extends StatefulWidget {
@@ -33,6 +35,22 @@ class _LocationPageState extends State<LocationPage> {
     setState(() {
       loading = false;  
     });
+  }
+
+  void navigate(BuildContext context, int index) {
+    Widget page = index == 0 ? const MapPage() : const LocationsPage();
+
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const ThreePointCubic curve = Curves.fastEaseInToSlowEaseOut;
+          CurvedAnimation curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+          return ScaleTransition(scale: curvedAnimation, child: child);
+        }
+      )
+    );
   }
 
   @override
@@ -186,10 +204,11 @@ class _LocationPageState extends State<LocationPage> {
         backgroundColor: const Color(0xFF2F2F55),
         showSelectedLabels: false,
         showUnselectedLabels: false,
+        onTap: (int index) => navigate(context, index),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.white),
-            label: 'Home',
+            icon: Icon(Icons.map, color: Colors.white),
+            label: 'Map',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list, color: Colors.white),
