@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/model/location.dart';
 import 'package:weather_app/model/forecast.dart';
+import 'package:weather_app/model/location.dart';
 import 'package:weather_app/pages/location/air_quality.dart';
 import 'package:weather_app/pages/location/daylight.dart';
 import 'package:weather_app/pages/location/feels_like.dart';
@@ -30,7 +30,7 @@ class _LocationPageState extends State<LocationPage> {
   late bool loading;
 
   Future<void> loadForecast() async {
-    forecast = await getForecast(widget.location);
+    forecast = await getForecastByLocation(widget.location);
 
     setState(() {
       loading = false;  
@@ -90,7 +90,7 @@ class _LocationPageState extends State<LocationPage> {
               Text(
                 loading
                   ? '-'
-                  : '${forecast.temperature}º | ${forecast.main}',
+                  : '${forecast.current.tempC}º | ${forecast.current.condition}',
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.grey
@@ -110,11 +110,13 @@ class _LocationPageState extends State<LocationPage> {
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 80.0),
         children: [
-          const ForecastPanel(),
+          ForecastPanel(
+            forecast: forecast.daily,
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: AirQualityPanel(
-              index: forecast.airQuality ?? 5,
+              index: forecast.current.aqi,
             ),
           ),
           Padding(
@@ -124,14 +126,14 @@ class _LocationPageState extends State<LocationPage> {
                 children: [
                   Flexible(
                     child: UVIndexPanel(
-                      index: forecast.uvi ?? 3,
+                      index: forecast.current.uvi,
                     )
                   ),
                   const SizedBox(width: 10),
                   Flexible(
                     child: DaylightPanel(
-                      sunrise: forecast.sunrise,
-                      sunset: forecast.sunset,
+                      sunrise: DateTime.now(),
+                      sunset: DateTime.now(),
                     )
                   )
                 ],
@@ -145,15 +147,15 @@ class _LocationPageState extends State<LocationPage> {
                 children: [
                   Flexible(
                     child: FeelsLikePanel(
-                      feelsLike: forecast.feelsLike,
-                      temperature: forecast.temperature,
+                      feelsLike: forecast.current.feelsLikeC,
+                      temperature: forecast.current.tempC,
                     )
                   ),
                   const SizedBox(width: 10),
                   Flexible(
                     child: HumidyPanel(
-                      humidity: forecast.humidity,
-                      dewPoint: forecast.dewPoint
+                      humidity: forecast.current.humidity,
+                      dewPoint: 0
                     )
                   )
                 ],
@@ -165,14 +167,14 @@ class _LocationPageState extends State<LocationPage> {
             child: IntrinsicHeight(
               child: Row(
                 children: [
-                  Flexible(
-                    child: VisibilityPanel(visibility: forecast.visibility)
+                  const Flexible(
+                    child: VisibilityPanel(visibility: 10000)
                   ),
                   const SizedBox(width: 10),
                   Flexible(
                     child: PrecipitationPanel(
-                      rain: forecast.rain,
-                      snow: forecast.snow,
+                      rain: forecast.current.precipitation,
+                      snow: 0,
                     )
                   )
                 ],
@@ -186,13 +188,13 @@ class _LocationPageState extends State<LocationPage> {
                 children: [
                   Flexible(
                     child: WindPanel(
-                      speed: forecast.windSpeed,
-                      angle: forecast.windAngle
+                      speed: forecast.current.windSpeed,
+                      angle: forecast.current.windAngle
                     )
                   ),
                   const SizedBox(width: 10),
                   Flexible(
-                    child: PressurePanel(pressure: forecast.pressure)
+                    child: PressurePanel(pressure: forecast.current.pressure)
                   )
                 ],
               ),

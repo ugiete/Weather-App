@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:weather_app/model/location.dart';
 import 'package:weather_app/model/forecast.dart';
+import 'package:weather_app/model/location.dart';
 
-Future<ForecastModel> getForecast(LocationModel location) async {
+const String kAPIKey = 'a861994b4c2b4bb4b6a153751231211';
+
+Future<ForecastModel> getForecastByLocation(LocationModel location) async {
   http.Response response = await http.post(
     Uri.https(
-      'api.openweathermap.org',
-      '/data/2.5/weather', {
+      'api.weatherapi.com',
+      '/v1/forecast.json', {
+        'key': kAPIKey,
         'q': location.query,
-        'appid': '307eac07e9da04d2560b2706968af830',
-        'units': 'metric'
+        'aqi': 'yes',
+        'days': '3',
+        'alerts': 'no'
       }
     )
   );

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:weather_app/model/day_forecast.dart';
 import 'package:weather_app/pages/location/forecast_tile.dart';
 
 class ForecastPanel extends StatelessWidget {
-  const ForecastPanel({super.key});
+  final List<DayForecast> forecast;
+
+  const ForecastPanel({super.key, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
+    DateFormat formatter = DateFormat.E();
+    
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -26,7 +32,7 @@ class ForecastPanel extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  'NEXT 3 DAYS',
+                  'NEXT ${forecast.length} DAYS',
                   style: TextStyle(
                     color: Colors.grey.shade300,
                     fontWeight: FontWeight.w500,
@@ -36,12 +42,23 @@ class ForecastPanel extends StatelessWidget {
               )
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: ForecastTile(day: 'Today', icon: Icons.cloud, min: 0, max: 10)
-          ),
-          const ForecastTile(day: 'Tue.', icon: Icons.sunny, min: 0, max: 10),
-          const ForecastTile(day: 'Wed.', icon: Icons.cloud, min: 0, max: 10),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: forecast.asMap().entries.map((entry) {
+                return ForecastTile(
+                  day: entry.key == 0
+                    ? 'Today'
+                    : '${formatter.format(entry.value.date)}.',
+                  condition: entry.value.condition,
+                  min: entry.value.tempMinC,
+                  max: entry.value.tempMaxC,
+                  avg: entry.value.tempAvgC,
+                );
+              }).toList(),
+            )
+          )
         ],
       ),
     );

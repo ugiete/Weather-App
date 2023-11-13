@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:weather_app/model/forecast.dart';
 import 'package:weather_app/model/location.dart';
 
 class DatabaseManager {
@@ -31,14 +30,9 @@ class DatabaseManager {
     );
   }
 
-  Future<void> addLocation(LocationModel location, ForecastModel? forecast) async {
+  Future<void> addLocation(LocationModel location) async {
     await _db!.transaction((Transaction txn) async {
-      int locationId = await txn.insert('locations', location.toMap);
-
-      if (forecast != null) {
-        forecast.locationId = locationId;
-        await txn.insert('forecasts', forecast.toMap);
-      }
+      await txn.insert('locations', location.toMap);
     });
   }
 
