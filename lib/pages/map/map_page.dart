@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:weather_app/model/location.dart';
+import 'package:weather_app/pages/location/location_page.dart';
 import 'package:weather_app/pages/locations/locations_page.dart';
+import 'package:weather_app/services/weather_api.dart';
 
 class MapPage extends StatefulWidget {
   final double lat;
@@ -31,8 +34,29 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> addLocation(LatLng coord) async {
-    debugPrint(coord.latitude.toString());
-    debugPrint(coord.longitude.toString());
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    );
+
+    getLocationByLatLon(coord.latitude, coord.longitude).then((LocationModel l) {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => LocationPage(location: l),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const ThreePointCubic curve = Curves.fastEaseInToSlowEaseOut;
+            CurvedAnimation curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+            return ScaleTransition(scale: curvedAnimation, child: child);
+          }
+        )
+      );
+    });
   }
 
   @override
