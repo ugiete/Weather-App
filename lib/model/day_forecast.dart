@@ -1,4 +1,5 @@
 import 'package:weather_app/enums/condition.dart';
+import 'package:weather_app/enums/units.dart';
 
 class DayForecast {
   final DateTime date;
@@ -25,4 +26,8 @@ class DayForecast {
 
     return DayForecast(date, tempMaxC, tempMaxF, tempMinC, tempMinF, tempAvgC, tempAvgF, weather, condition);
   }
+
+  int max(Units unit) => unit == Units.celsius ? tempMaxC : tempMaxF;
+  int avg(Units unit) => unit == Units.celsius ? tempMinC : tempMinF;
+  int min(Units unit) => unit == Units.celsius ? tempAvgC : tempAvgF;
 }

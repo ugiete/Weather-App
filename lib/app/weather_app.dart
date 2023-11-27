@@ -22,9 +22,7 @@ class WeatherApp extends StatelessWidget {
         title: 'Weather App',
         home: defaultLocation == null
           ? const LocationsPage()
-          : LocationPage(
-            location: defaultLocation!
-          )
+          : LocationPage(location: defaultLocation!)
       ),
     );
   }

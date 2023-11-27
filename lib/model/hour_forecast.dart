@@ -1,4 +1,5 @@
 import 'package:weather_app/enums/condition.dart';
+import 'package:weather_app/enums/units.dart';
 
 class HourForecastModel {
   final DateTime time;
@@ -37,4 +38,7 @@ class HourForecastModel {
 
     return HourForecastModel(time, tempC, tempF, feelsLikeC, feelsLikeF, isDay, weather, condition, windSpeed, windAngle, pressure, precipitation, humidity, uvi, aqi);
   }
+
+  int temp(Units unit) => unit == Units.celsius ? tempC : tempF;
+  int feelsLike(Units unit) => unit == Units.celsius ? feelsLikeC : feelsLikeF;
 }
