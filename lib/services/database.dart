@@ -24,8 +24,7 @@ class DatabaseManager {
         await db.execute('PRAGMA foreign_keys = ON');
       },
       onCreate: (Database db, int version) async {
-        await db.execute('CREATE TABLE locations (id INTEGER PRIMARY KEY, city TEXT, region TEXT, country TEXT, lat REAL, lon REAL);');
-        await db.execute('CREATE TABLE forecasts (id INTEGER PRIMARY KEY, main TEXT, description TEXT, sunrise INTEGER, sunset INTEGER, temperature INTEGER, temperatureMin INTEGER, temperatureMax INTEGER, feelsLike INTEGER, pressure INTEGER, humidity INTEGER, airQuality INTEGER, dewPoint INTEGER, uvi INTEGER, visibility INTEGER, windSpeed INTEGER, windAngle INTEGER, rain INTEGER, snow INTEGER, locationId INTEGER, FOREIGN KEY(locationId) REFERENCES locations(id));');
+        await db.execute('CREATE TABLE locations (id INTEGER PRIMARY KEY, city TEXT, region TEXT, country TEXT, lat REAL, lon REAL, tz_id TEXT);');
       }
     );
   }

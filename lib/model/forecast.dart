@@ -9,7 +9,9 @@ class ForecastModel {
   const ForecastModel(this.current, this.hourly, this.daily);
 
   factory ForecastModel.fromJSON(Map<String, dynamic> json) {
-    HourForecastModel current = HourForecastModel.fromJSON(json['current']);
+    DateTime now = DateTime.now();
+
+    HourForecastModel current = HourForecastModel.fromJSON(now, json['current']);
     List<HourForecastModel> hourly = [];
     List<DayForecast> daily = [];
 
@@ -18,7 +20,11 @@ class ForecastModel {
       daily.add(DayForecast.fromJSON(date, forecast['day']));
 
       for (Map<String, dynamic> hourForecast in forecast['hour']) {
-        hourly.add(HourForecastModel.fromJSON(hourForecast));
+        DateTime time = DateTime.parse(hourForecast['time']);
+
+        if (time.isAfter(now) || time.difference(now).inHours == 0) {
+          hourly.add(HourForecastModel.fromJSON(time, hourForecast));
+        }
       }
     }
 

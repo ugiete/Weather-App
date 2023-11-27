@@ -1,6 +1,7 @@
 import 'package:weather_app/enums/condition.dart';
 
 class HourForecastModel {
+  final DateTime time;
   final int tempC;
   final int tempF;
   final int feelsLikeC;
@@ -16,9 +17,9 @@ class HourForecastModel {
   final int uvi;
   final int? aqi;
 
-  const HourForecastModel(this.tempC, this.tempF, this.feelsLikeC, this.feelsLikeF, this.isDay, this.weather, this.condition, this.windSpeed, this.windAngle, this.pressure, this.precipitation, this.humidity, this.uvi, this.aqi);
+  const HourForecastModel(this.time, this.tempC, this.tempF, this.feelsLikeC, this.feelsLikeF, this.isDay, this.weather, this.condition, this.windSpeed, this.windAngle, this.pressure, this.precipitation, this.humidity, this.uvi, this.aqi);
 
-  factory HourForecastModel.fromJSON(Map<String, dynamic> json) {
+  factory HourForecastModel.fromJSON(DateTime time, Map<String, dynamic> json) {
     int tempC = json['temp_c'].round();
     int tempF = json['temp_f'].round();
     int feelsLikeC = json['feelslike_c'].round();
@@ -32,8 +33,8 @@ class HourForecastModel {
     int precipitation = json['precip_mm'].round();
     int humidity = json['humidity'].round();
     int uvi = json['uv'].round();
-    int? aqi = json['air_quality']['gb-defra-index']?.round();
+    int? aqi = json['air_quality']?['gb-defra-index']?.round();
 
-    return HourForecastModel(tempC, tempF, feelsLikeC, feelsLikeF, isDay, weather, condition, windSpeed, windAngle, pressure, precipitation, humidity, uvi, aqi);
+    return HourForecastModel(time, tempC, tempF, feelsLikeC, feelsLikeF, isDay, weather, condition, windSpeed, windAngle, pressure, precipitation, humidity, uvi, aqi);
   }
 }

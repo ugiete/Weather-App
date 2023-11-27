@@ -4,7 +4,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:weather_app/pages/locations/locations_page.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final double lat;
+  final double lon;
+
+  const MapPage({super.key, this.lat = 0.0, this.lon = 0.0});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -52,9 +55,11 @@ class _MapPageState extends State<MapPage> {
       body: FlutterMap(
         mapController: controller,
         options: MapOptions(
+          maxZoom: 12,
+          minZoom: 5,
           onTap: (TapPosition position, LatLng coord) => addLocation(coord),
-          initialCenter: const LatLng(51.5, -0.09),
-          initialZoom: 5
+          initialCenter: LatLng(widget.lat, widget.lon),
+          initialZoom: 12
         ),
         children: [
           TileLayer(

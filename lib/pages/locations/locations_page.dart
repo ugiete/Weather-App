@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/model/location.dart';
 import 'package:weather_app/pages/locations/location_card.dart';
+import 'package:weather_app/pages/locations/settings_menu.dart';
+import 'package:weather_app/pages/search/search_page.dart';
 import 'package:weather_app/services/database.dart';
 
 class LocationsPage extends StatefulWidget {
@@ -11,6 +13,20 @@ class LocationsPage extends StatefulWidget {
 }
 
 class _LocationsPageState extends State<LocationsPage> {
+  void searchLocations() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const SearchPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const ThreePointCubic curve = Curves.fastEaseInToSlowEaseOut;
+          CurvedAnimation curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+          return ScaleTransition(scale: curvedAnimation, child: child);
+        }
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {    
     return Scaffold(
@@ -18,50 +34,10 @@ class _LocationsPageState extends State<LocationsPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: PopupMenuButton(
-              color: Colors.indigo.withOpacity(0.6),
-              itemBuilder: (BuildContext context) {
-                List<Map<String, dynamic>> options = [
-                  {'selected': true, 'unit': 'Celsius', 'symbol': 'ºC'},
-                  {'selected': false, 'unit': 'Fahrenheit', 'symbol': 'ºF'},
-                ];
-
-                return options.map((Map<String, dynamic> option) {
-                  return PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-
-                      },
-                      contentPadding: EdgeInsets.zero,
-                      horizontalTitleGap: 2,
-                      leading: SizedBox(
-                        width: 20,
-                        child: option['selected'] ? const Icon(Icons.check, color: Colors.white) : null,
-                      ),
-                      title: SizedBox(
-                        width: 100,
-                        child: Text(
-                          option['unit'],
-                          style: const TextStyle(
-                            color: Colors.white
-                          ),
-                        )
-                      ),
-                      trailing: Text(
-                        option['symbol'],
-                        style: const TextStyle(
-                          color: Colors.white
-                        ),
-                      ),
-                    )
-                  );
-                }).toList();
-              },
-              child: const Icon(Icons.settings),
-            ),
+            padding: EdgeInsets.only(right: 20.0),
+            child: SettingsMenu()
           )
         ],
       ),
@@ -79,34 +55,37 @@ class _LocationsPageState extends State<LocationsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: TextField(
-              cursorColor: Colors.white,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white
+            child: GestureDetector(
+              onTap: searchLocations,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 20.0
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.white24,
+                ),
+                child: const Row(
+                  children: [
+                     Icon(
+                      Icons.search,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        'Search city',
+                        style: TextStyle(
+                          color: Colors.white
+                        )
+                      ),
+                    )
+                  ],
+                ),
               ),
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                filled: true,
-                fillColor: Colors.white24,
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                hintText: 'Search city',
-                hintStyle: const TextStyle(
-                  color: Colors.white
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0)
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0)
-                )
-              ),
-            ),
+            )
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),

@@ -3,15 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DaylightPanel extends StatelessWidget {
-  final DateTime sunrise;
-  final DateTime sunset;
+  final bool isDay;
+  final DateTime? sunrise;
+  final DateTime? sunset;
 
-  const DaylightPanel({super.key, required this.sunrise, required this.sunset});
+  const DaylightPanel({super.key, required this.isDay, required this.sunrise, required this.sunset});
+
+  String getSunset(DateFormat formatter) {
+    return sunset != null
+      ? formatter.format(sunset!.toLocal())
+      : "N/A";
+  }
+
+  String getSunrise(DateFormat formatter) {
+    return sunrise != null
+      ? formatter.format(sunrise!.toLocal())
+      : "N/A";
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    bool isDay = now.isAfter(sunrise) && now.isBefore(sunset);
     DateFormat formatter = DateFormat('h:mm a');
 
     return Container(
@@ -50,7 +61,9 @@ class DaylightPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              formatter.format(isDay ? sunset.toLocal() : sunrise.toLocal()),
+              isDay
+                ? getSunset(formatter)
+                : getSunrise(formatter),
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -73,8 +86,8 @@ class DaylightPanel extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 isDay
-                  ? 'Sunrise: ${formatter.format(sunrise.toLocal())}'
-                  : 'Sunset: ${formatter.format(sunset.toLocal())}',
+                  ? 'Sunrise: ${getSunrise(formatter)}'
+                  : 'Sunset: ${getSunset(formatter)}',
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontWeight: FontWeight.w400,

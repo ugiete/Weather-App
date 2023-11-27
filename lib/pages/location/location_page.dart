@@ -5,6 +5,7 @@ import 'package:weather_app/pages/location/air_quality.dart';
 import 'package:weather_app/pages/location/daylight.dart';
 import 'package:weather_app/pages/location/feels_like.dart';
 import 'package:weather_app/pages/location/forecast.dart';
+import 'package:weather_app/pages/location/hour_forecast.dart';
 import 'package:weather_app/pages/location/humidity.dart';
 import 'package:weather_app/pages/location/precipitation.dart';
 import 'package:weather_app/pages/location/pressure.dart';
@@ -38,7 +39,9 @@ class _LocationPageState extends State<LocationPage> {
   }
 
   void navigate(BuildContext context, int index) {
-    Widget page = index == 0 ? const MapPage() : const LocationsPage();
+    Widget page = index == 0
+      ? MapPage(lat: widget.location.latitude ?? 0.0, lon: widget.location.longitude ?? 0.0)
+      : const LocationsPage();
 
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -90,7 +93,7 @@ class _LocationPageState extends State<LocationPage> {
               Text(
                 loading
                   ? '-'
-                  : '${forecast.current.tempC}º | ${forecast.current.condition}',
+                  : '${forecast.current.tempC}º | ${forecast.current.weather}',
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.grey
@@ -110,8 +113,12 @@ class _LocationPageState extends State<LocationPage> {
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 80.0),
         children: [
-          ForecastPanel(
-            forecast: forecast.daily,
+          HourForecastPanel(forecast: forecast.hourly),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: ForecastPanel(
+              forecast: forecast.daily,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
@@ -132,8 +139,9 @@ class _LocationPageState extends State<LocationPage> {
                   const SizedBox(width: 10),
                   Flexible(
                     child: DaylightPanel(
-                      sunrise: DateTime.now(),
-                      sunset: DateTime.now(),
+                      isDay: forecast.current.isDay,
+                      sunrise: null, //TODO: WEATHER API DOESN'T CONTAIN SUNRISE DATA
+                      sunset: null, //TODO: WEATHER API DOESN'T CONTAIN SUNSET DATA
                     )
                   )
                 ],
@@ -155,7 +163,7 @@ class _LocationPageState extends State<LocationPage> {
                   Flexible(
                     child: HumidyPanel(
                       humidity: forecast.current.humidity,
-                      dewPoint: 0
+                      dewPoint: 0 //TODO: WEATHER API DOESN'T CONTAIN DEW POINT DATA
                     )
                   )
                 ],
@@ -203,7 +211,7 @@ class _LocationPageState extends State<LocationPage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF2F2F55),
+        backgroundColor: const Color(0xFF2F2F55).withOpacity(0.8),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         onTap: (int index) => navigate(context, index),
