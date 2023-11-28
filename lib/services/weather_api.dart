@@ -46,7 +46,7 @@ Future<ForecastModel> getForecastByLocation(LocationModel location, {int days = 
 
   Map<String, dynamic> body = jsonDecode(response.body);
 
-  return ForecastModel.fromJSON(body);
+  return ForecastModel.fromJSON(body, body['location']['tz_id']);
 }
 
 Future<LocationModel> getLocationByLatLon(double lat, double lon) async {

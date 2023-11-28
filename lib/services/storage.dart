@@ -38,4 +38,8 @@ class StorageManager {
   Future<void> updateDefaultLocation(LocationModel location) async {
     await storage.write(key: 'defaultLoc', value: location.id!.toString());
   }
+
+  Future<void> deleteDefaultLocation() async {
+    await storage.delete(key: 'defaultLoc');
+  }
 }

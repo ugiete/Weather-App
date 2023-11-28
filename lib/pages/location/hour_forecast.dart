@@ -4,9 +4,10 @@ import 'package:weather_app/model/hour_forecast.dart';
 import 'package:weather_app/pages/location/forecast_card.dart';
 
 class HourForecastPanel extends StatelessWidget {
+  final String? timezone;
   final List<HourForecastModel> forecast;
 
-  const HourForecastPanel({super.key, required this.forecast});
+  const HourForecastPanel({super.key, required this.forecast, required this.timezone});
 
   @override
   Widget build(BuildContext context) {

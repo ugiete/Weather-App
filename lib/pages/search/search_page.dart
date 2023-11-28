@@ -60,10 +60,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {    
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getPosition,
-        child: const Icon(Icons.gps_fixed),
-      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

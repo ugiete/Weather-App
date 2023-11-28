@@ -28,6 +28,6 @@ class DayForecast {
   }
 
   int max(Units unit) => unit == Units.celsius ? tempMaxC : tempMaxF;
-  int avg(Units unit) => unit == Units.celsius ? tempMinC : tempMinF;
-  int min(Units unit) => unit == Units.celsius ? tempAvgC : tempAvgF;
+  int avg(Units unit) => unit == Units.celsius ? tempAvgC : tempAvgF;
+  int min(Units unit) => unit == Units.celsius ? tempMinC : tempMinF;
 }

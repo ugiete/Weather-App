@@ -119,7 +119,10 @@ class _LocationPageState extends State<LocationPage> {
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 80.0),
             children: [
-              HourForecastPanel(forecast: forecast.hourly),
+              HourForecastPanel(
+                timezone: widget.location.timezone,
+                forecast: forecast.hourly
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: ForecastPanel(

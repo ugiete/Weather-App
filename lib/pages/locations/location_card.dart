@@ -33,6 +33,11 @@ class _LocationCardState extends State<LocationCard> {
     StorageManager().updateDefaultLocation(widget.location);
   }
 
+  void removeDefaultLocation(BuildContext context) {
+    context.read<SettingsBloc>().updateLocation(null);
+    StorageManager().deleteDefaultLocation();
+  }
+
   void openLocation(BuildContext context) {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -81,16 +86,25 @@ class _LocationCardState extends State<LocationCard> {
             : ActionPane(
               motion: const BehindMotion(),
               children: [
-                if (!widget.isDefault)
-                  SlidableAction(
+                widget.isDefault
+                  ? SlidableAction(
+                    onPressed: removeDefaultLocation,
+                    backgroundColor: Colors.blue,
+                    label: 'Unfav',
+                    foregroundColor: Colors.white,
+                    icon: Icons.star_border
+                  )
+                  : SlidableAction(
                     onPressed: saveDefaultLocation,
                     backgroundColor: Colors.blue,
+                    label: 'Fav',
                     foregroundColor: Colors.white,
                     icon: Icons.star
                   ),
                 SlidableAction(
                   onPressed: (BuildContext context) => widget.onDelete(),
                   backgroundColor: const Color(0xFFFE4A49),
+                  label: 'Remove',
                   foregroundColor: Colors.white,
                   icon: Icons.delete
                 )

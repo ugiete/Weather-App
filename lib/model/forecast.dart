@@ -1,3 +1,4 @@
+import 'package:timezone/timezone.dart';
 import 'package:weather_app/model/day_forecast.dart';
 import 'package:weather_app/model/hour_forecast.dart';
 
@@ -8,7 +9,8 @@ class ForecastModel {
 
   const ForecastModel(this.current, this.hourly, this.daily);
 
-  factory ForecastModel.fromJSON(Map<String, dynamic> json) {
+  factory ForecastModel.fromJSON(Map<String, dynamic> json, String? timezone) {
+    Location? tzLocation = timezone == null ? null : getLocation(timezone);
     DateTime now = DateTime.now();
 
     HourForecastModel current = HourForecastModel.fromJSON(now, json['current']);
@@ -23,7 +25,11 @@ class ForecastModel {
         DateTime time = DateTime.parse(hourForecast['time']);
 
         if (time.isAfter(now) || time.difference(now).inHours == 0) {
-          hourly.add(HourForecastModel.fromJSON(time, hourForecast));
+          DateTime tzTime = tzLocation == null
+            ? time
+            : TZDateTime.from(time, tzLocation);
+
+          hourly.add(HourForecastModel.fromJSON(tzTime, hourForecast));
         }
       }
     }

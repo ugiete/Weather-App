@@ -7,6 +7,7 @@ import 'package:weather_app/pages/locations/location_card.dart';
 import 'package:weather_app/pages/locations/settings_menu.dart';
 import 'package:weather_app/pages/search/search_page.dart';
 import 'package:weather_app/services/database.dart';
+import 'package:weather_app/services/storage.dart';
 
 class LocationsPage extends StatefulWidget {
   const LocationsPage({super.key});
@@ -33,6 +34,7 @@ class _LocationsPageState extends State<LocationsPage> {
   void deleteLocation(LocationModel location, LocationModel? defaultLocation) {
     if (location.id == defaultLocation?.id) {
       context.read<SettingsBloc>().updateLocation(null);
+      StorageManager().deleteDefaultLocation();
     }
 
     DatabaseManager().deleteLocation(location).whenComplete(() {
@@ -108,6 +110,35 @@ class _LocationsPageState extends State<LocationsPage> {
                   future: DatabaseManager().listLocations(),
                   builder: (BuildContext context, AsyncSnapshot<List<LocationModel>> snapshot) {
                     if (snapshot.hasData) {
+                      if (snapshot.data!.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Column(
+                            children: [
+                              const Icon(
+                                Icons.warning_amber_rounded,
+                                color: Colors.white70,
+                                size: 42,
+                              ),
+                              const Text(
+                                "You didn't save any locations",
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: ElevatedButton(
+                                  onPressed: searchLocations,
+                                  child: const Text('Search your city')
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
