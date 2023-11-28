@@ -22,8 +22,9 @@ import 'package:weather_app/services/weather_api.dart';
 class LocationPage extends StatefulWidget {
   final LocationModel location;
   final ForecastModel? initialForecast;
+  final bool save;
 
-  const LocationPage({super.key, required this.location, this.initialForecast});
+  const LocationPage({super.key, required this.location, this.initialForecast, this.save = false});
 
   @override
   State<LocationPage> createState() => _LocationPageState();

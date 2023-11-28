@@ -29,6 +29,7 @@ class _LocationCardState extends State<LocationCard> {
   late ForecastModel forecast;
 
   void saveDefaultLocation(BuildContext context) {
+    context.read<SettingsBloc>().updateLocation(widget.location);
     StorageManager().updateDefaultLocation(widget.location);
   }
 
@@ -113,13 +114,23 @@ class _LocationCardState extends State<LocationCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              widget.location.city,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (widget.location.isFavorite)
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 10.0),
+                                    child: Icon(Icons.star, color: Colors.white),
+                                  ),
+                                Text(
+                                  widget.location.city,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
                             ),
                             Text(
                               tzLocation == null

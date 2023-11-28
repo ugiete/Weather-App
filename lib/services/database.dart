@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:weather_app/model/location.dart';
+import 'package:weather_app/services/storage.dart';
 
 class DatabaseManager {
   Database? _db;
@@ -47,10 +48,11 @@ class DatabaseManager {
 
   Future<List<LocationModel>> listLocations() async {
     List<LocationModel> locations = [];
-    List<Map<String, dynamic>> raw = await _db?.rawQuery('SELECT * FROM locations') ?? [];
+    List<Map<String, dynamic>> raw = await _db?.rawQuery('SELECT * FROM locations ORDER BY city ASC') ?? [];
+    LocationModel? defaultLocation = await StorageManager().getDefaultLocation();
 
     for (Map<String, dynamic> entry in raw) {
-      locations.add(LocationModel.fromJSON(entry));
+      locations.add(LocationModel.fromJSON(entry, defaultId: defaultLocation?.id));
     }
 
     return locations;

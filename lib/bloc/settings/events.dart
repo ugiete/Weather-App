@@ -1,9 +1,9 @@
-import 'package:weather_app/enums/units.dart';
+import 'package:weather_app/bloc/settings/state.dart';
 
 abstract class SettingsBlocEvent {}
 
-class UpdateUnitEvent extends SettingsBlocEvent {
-  final Units unit;
+class UpdateEvent extends SettingsBlocEvent {
+  final SettingsBlocState state;
 
-  UpdateUnitEvent(this.unit);
+  UpdateEvent(this.state);
 }

@@ -16,7 +16,7 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SettingsBloc(SettingsBlocState(defaultUnit)),
+      create: (context) => SettingsBloc(SettingsBlocState(defaultLocation, defaultUnit)),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Weather App',

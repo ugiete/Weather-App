@@ -17,6 +17,10 @@ class _SearchPageState extends State<SearchPage> {
   List<LocationModel> locations = [];
 
   Future<void> getPosition() async {
+    setState(() {
+      loading = true;
+    });
+    
     Position? position = await getCurrentPosition();
 
     if (position != null) {

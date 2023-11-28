@@ -30,7 +30,7 @@ Future<List<LocationModel>> searchLocations(String query) async {
   return locations;
 } 
 
-Future<ForecastModel> getForecastByLocation(LocationModel location, {int days = 3, byCoords = false}) async {
+Future<ForecastModel> getForecastByLocation(LocationModel location, {int days = 3}) async {
   http.Response response = await http.post(
     Uri.https(
       'api.weatherapi.com',
@@ -44,7 +44,9 @@ Future<ForecastModel> getForecastByLocation(LocationModel location, {int days = 
     )
   );
 
-  return ForecastModel.fromJSON(jsonDecode(response.body));
+  Map<String, dynamic> body = jsonDecode(response.body);
+
+  return ForecastModel.fromJSON(body);
 }
 
 Future<LocationModel> getLocationByLatLon(double lat, double lon) async {
